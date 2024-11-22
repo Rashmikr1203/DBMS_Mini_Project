@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Resource Example</title>
+    <link rel="stylesheet" href="project.css">
+    <script crossdomain src="https://unpkg.com/react@16/umd/react.development.js"> </script> 
+
+    <script crossdomain src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"> </script>
+
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"> </script>
+</head>
+<body>
+    <div id="text"></div>
+    <script type="text/babel">
+        class Header extends React.Component
+        {
+            render()
+            {
+                return(
+                    <div style={{fontSize:"30px",}}><h1 style={{color:"#F62A90",fontFamily:"Brush Script MT",}}>Library</h1></div>
+                );
+            }
+        }
+        class Text extends React.Component
+        {
+            render()
+            {
+                return(
+                    <div style={{width:'50%',height:'50%'}}><h1 style={{color:"black"}}><b>Knowledge is Power</b></h1></div>
+                );
+            }
+        }
+        class Image extends React.Component
+        {
+            render()
+            {
+                return(
+                    <div><img src={this.props.src} style={{width:'600pt',height:'300pt'}}/></div>
+                );
+            }
+        }
+        class Button extends React.Component
+        {
+            render()
+            {const redirectToAnotherPage = (page) => {
+                // Redirect to the specified page
+                window.location.href = page;
+            };
+
+            return (
+            <div>
+            <button onClick={() => redirectToAnotherPage('2.html')} style={{ backgroundColor: 'black', color: 'white', height: '35%', width: '25%' }}>
+                User Log in
+            </button>
+    
+            <button onClick={() => redirectToAnotherPage('2_nish.html')} style={{ backgroundColor: 'black', color: 'white', height: '35%', width: '25%' }}>
+                Staff Log in
+            </button>
+            </div>
+            );
+
+            }
+        }
+        class Page1 extends React.Component
+        {
+            render()
+            {
+                return(
+                    <div>
+                        <Header/>
+                        <div style={{display:'flex',width:"100%",}}>
+                            <div style={{display:'inline-block',width:"100%",}}><Text/><Button/></div>
+                            <Image{...this.props}/></div>
+                        </div>
+                );
+            }
+        }
+        ReactDOM.render(<div><Page1
+        src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYTxFXvhQU6v4oLLgtxpA4-243fc2miikkFg&s'
+        /></div>,document.querySelector("#text"));
+
+    </script>
+</body>
+</html>

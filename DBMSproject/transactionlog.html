@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Transaction Log</title>
+  <style>
+    body {
+      background-color: #01796F;
+      font-family: Arial, sans-serif;
+      color: #F4EDE1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      max-width: 500px;
+      width: 100%;
+      padding: 20px;
+      background-color: #6B8E4E;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+    h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    input[type="number"],
+    input[type="date"],
+    select {
+      width: 80%;
+      padding: 5px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #2D4A27;
+      font-size: 12px;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th, td {
+      border: 1px solid #2D4A27;
+      padding: 6px;
+      text-align: center;
+    }
+    th {
+      background-color: #2D4A27;
+      color: #F4EDE1;
+    }
+    button {
+      width: 80%;
+      padding: 8px;
+      background-color: #2D4A27;
+      color: #F4EDE1;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #D27D2D;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Transaction Log</h2>
+
+    <!-- Transaction Log Form -->
+    <form id="transactionForm" onsubmit="handleFormSubmit(event)">
+      <label for="transaction_id">Transaction ID:</label>
+      <input type="number" id="transaction_id" name="transaction_id">
+
+      <label for="book_id">Book ID:</label>
+      <input type="number" id="book_id" name="book_id">
+
+      <label for="user_id">User ID:</label>
+      <input type="number" id="user_id" name="user_id">
+
+      <label for="item_type">Item Type:</label>
+      <select id="item_type" name="item_type">
+        <option value="Book">Book</option>
+        <option value="Research Paper">Research Paper</option>
+        <option value="Magazine">Magazine</option>
+        <option value="Journal">Journal</option>
+      </select>
+
+      <label for="date_borrowed">Date Borrowed:</label>
+      <input type="date" id="date_borrowed" name="date_borrowed">
+
+      <label for="return_date">Return Date:</label>
+      <input type="date" id="return_date" name="return_date">
+
+      <label for="damage_fine">Damage Fine:</label>
+      <input type="number" id="damage_fine" name="damage_fine" step="0.01">
+
+      <label for="late_fees">Late Fees:</label>
+      <input type="number" id="late_fees" name="late_fees" step="0.01">
+
+      <button type="submit">Add Transaction</button>
+    </form>
+
+    <!-- Table to display transaction logs -->
+    <h3>Transaction Records</h3>
+    <table id="transactionTable">
+      <thead>
+        <tr>
+          <th>Transaction ID</th>
+          <th>Book ID</th>
+          <th>User ID</th>
+          <th>Item Type</th>
+          <th>Date Borrowed</th>
+          <th>Return Date</th>
+          <th>Damage Fine</th>
+          <th>Late Fees</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data will be dynamically populated here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Function to handle form submission
+    async function handleFormSubmit(event) {
+      event.preventDefault();
+
+      const transaction_id = document.getElementById("transaction_id").value;
+      const book_id = document.getElementById("book_id").value;
+      const user_id = document.getElementById("user_id").value;
+      const item_type = document.getElementById("item_type").value;
+      const date_borrowed = document.getElementById("date_borrowed").value;
+      const return_date = document.getElementById("return_date").value;
+      const damage_fine = document.getElementById("damage_fine").value;
+      const late_fees = document.getElementById("late_fees").value;
+
+      const data = {
+        transaction_id,
+        book_id,
+        user_id,
+        item_type,
+        date_borrowed,
+        return_date,
+        damage_fine,
+        late_fees
+      };
+
+      // Send the transaction data to the server (replace endpoint URL with actual server URL)
+      try {
+        const response = await fetch('/addTransaction', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        alert(result.message);
+
+        // Reload the transaction table after submission
+        loadTransactionData();
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+
+    // Function to load transaction data
+    async function loadTransactionData() {
+      try {
+        const response = await fetch('/getTransactions');
+        const transactions = await response.json();
+
+        // Populate the transaction table
+        const tableBody = document.querySelector("#transactionTable tbody");
+        tableBody.innerHTML = ''; // Clear previous data
+
+        transactions.forEach(transaction => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${transaction.transaction_id}</td>
+            <td>${transaction.book_id}</td>
+            <td>${transaction.user_id}</td>
+            <td>${transaction.item_type}</td>
+            <td>${transaction.date_borrowed}</td>
+            <td>${transaction.return_date}</td>
+            <td>${transaction.damage_fine}</td>
+            <td>${transaction.late_fees}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        console.error("Error loading transactions:", error);
+      }
+    }
+
+    // Initialize by loading transaction data
+    loadTransactionData();
+  </script>
+</body>
+</html>

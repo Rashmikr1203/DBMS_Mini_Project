@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Return Book</title>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <style>
+    body {
+      background-color: #01796F;
+      font-family: Arial, sans-serif;
+      color: #F4EDE1;
+    }
+    .App {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    form {
+      background-color: #6B8E4E;
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+      box-shadow: 0 0 10px #2D4A27;
+    }
+    label, input {
+      display: block;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+    button {
+      background-color: #D27D2D;
+      color: #F4EDE1;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+   function ReturnBookForm() {
+  const [transactionId, setTransactionId] = React.useState('');
+  const [returnDate, setReturnDate] = React.useState('');
+  const [message, setMessage] = React.useState('');
+  const [lateFee, setLateFee] = React.useState(null);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setMessage("Processing...");
+    setLateFee(null);
+
+    try {
+      const response = await fetch('http://localhost:3000/return-book', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          transactionId: transactionId,
+          returnDate: returnDate,
+        }),
+      });
+      const result = await response.json();
+
+      if (response.ok) {
+        setMessage(result.message);
+        setLateFee(result.lateFee); // Set late fee if applicable
+      } else {
+        setMessage("Error: " + result.error);
+      }
+    } catch (error) {
+      setMessage("Server error. Please try again.");
+    }
+  };
+
+  return (
+    <div className="App">
+      <h2>Return Book</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Transaction ID:
+          <input
+            type="number"
+            value={transactionId}
+            onChange={(e) => setTransactionId(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Return Date:
+          <input
+            type="date"
+            value={returnDate}
+            onChange={(e) => setReturnDate(e.target.value)}
+            required
+          />
+        </label>
+        <button type="submit">Return Book</button>
+      </form>
+      <p>{message}</p>
+      
+      {lateFee > 0 && (
+        <button onClick={() => window.location.href = 'feecal.html'}>
+          Go to Late Fee Calculator
+        </button>
+      )}
+    </div>
+  );
+}
+
+
+
+
+
+    ReactDOM.render(<ReturnBookForm />, document.getElementById('root'));
+  </script>
+</body>
+</html>

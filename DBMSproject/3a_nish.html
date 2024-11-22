@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="project.css">
+</head>
+<body style="background-color: #01796F; font-family: Arial, sans-serif;">
+    <div id="header"></div>
+    <div id="userInformation"></div>
+  
+  <script type="text/babel">
+      class Header extends React.Component {
+            render() {
+                return (
+                    <div style={{ fontSize: "30px", textAlign: "center", marginBottom: "20px" }}>
+                        <h1 style={{ color: "#3B2C27", fontFamily: "Brush Script MT" }}>Library</h1>
+                    </div>
+                );
+            }
+        }
+
+    class UserInformation extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                email: '',
+                password: '',
+            };
+        }
+
+        handleInputChange = (event) => {
+            const { name, value } = event.target;
+            this.setState({ [name]: value });
+        };
+
+        handleLogin = async (event) => {
+            event.preventDefault(); // Prevent form default behavior
+
+            const { email, password } = this.state;
+
+            try {
+                const response = await fetch('http://localhost:3000/checkStaffLogin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email_id: email,
+                        password: password,
+                    }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Response data:', data);  // Log the response data for debugging
+
+                    const staffName = encodeURIComponent(data.staff_name);  // URL encode the staff name
+
+                    // Redirect to the staff operations page with staff_name as a query parameter
+                    window.location.href = `staffOperations.html?staff_name=${staffName}`;
+                } else {
+                    alert('Invalid email or password. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('There was an error during login. Please try again.');
+            }
+        };
+
+        render() {
+            return (
+                <div style={{
+                    height: "50%",
+                    marginTop: "5%",
+                    marginLeft: "25%",
+                    marginRight: "25%",
+                    backgroundColor: "#6B8E4E",
+                    textAlign: "center",
+                    padding: "20px",
+                    borderRadius: "8px",
+                    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)"
+                }}>
+                    <h1 className="heading" style={{ color: "#3B2C27" }}>Staff Log In</h1>
+                    <div style={{ marginBottom: "15px" }}>
+                        <label style={{ color: "#F4EDE1" }}>Email_id:</label><br />
+                        <input
+                            type="text"
+                            name="email"
+                            placeholder="Enter email_id"
+                            value={this.state.email}
+                            onChange={this.handleInputChange}
+                            style={{
+                                padding: "10px",
+                                width: "80%",
+                                borderRadius: "5px",
+                                border: "1px solid #3B2C27",
+                                marginTop: "5px"
+                            }}
+                        />
+                    </div>
+                    <div style={{ marginBottom: "20px" }}>
+                        <label style={{ color: "#F4EDE1" }}>New Password:</label><br />
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Enter new password"
+                            value={this.state.password}
+                            onChange={this.handleInputChange}
+                            style={{
+                                padding: "10px",
+                                width: "80%",
+                                borderRadius: "5px",
+                                border: "1px solid #3B2C27",
+                                marginTop: "5px"
+                            }}
+                        />
+                    </div>
+                    <button
+                        className="loginButton"
+                        onClick={this.handleLogin}
+                        style={{
+                            backgroundColor: "#2D4A27",
+                            color: "#F4EDE1",
+                            padding: "10px 20px",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            fontSize: "1em"
+                        }}
+                    >
+                        Log In
+                    </button>
+                </div>
+            );
+        }
+    }
+
+    ReactDOM.render(<Header />, document.getElementById('header'));
+    ReactDOM.render(<UserInformation />, document.getElementById('userInformation'));
+  </script>
+</body>
+</html>

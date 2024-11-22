@@ -1,0 +1,114 @@
+header h1{
+    color: #F62A90;
+    text-decoration-color: #F62A90;
+    font-family: Brush Script MT;
+    font-size:75px;
+    margin-left: 10px;
+    padding-top: 0px;
+    display: inline;
+}
+
+.bg-image{
+    position: absolute;
+    top: 200;
+    left: 0;
+    width: 100%;
+    height: 600px;
+
+    z-index: -1; /* Place the background image behind the text */
+    opacity: 0.4;
+    margin-left: 0px;
+}
+#image{
+    display:inline;
+}
+header button{
+    background-color: aquamarine;
+    border: 0;
+    font-size: 15px;
+    font-weight: bolder;
+    color:rgb(66, 29, 2) ;
+    display: inline;
+    margin-left: 20px;
+}
+
+header button:hover{
+    text-decoration-line: underline;
+    color: blue;
+}
+#h1 h2{
+    color: rgb(66, 29, 2);
+    margin-left: 50px;
+    font-size: 40px;
+    margin-top: 100px;
+    margin-bottom: 5px;
+    margin-right: 00px;
+    text-align: center;
+}
+
+#h1 h3{
+    color: rgb(79, 36, 5);
+    margin-left: 28px;
+    font-size: 27px;
+    margin-top: 7px;
+    text-align: center;
+}
+body{
+    background-color:aquamarine;
+    font-family: Arial, sans-serif;
+
+}
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+  }
+
+  section {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px; /* Added border-radius for rounded corners */
+  }
+
+  #searchInput {
+    width: 70%;
+    padding: 8px;
+    margin-right: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px; /* Rounded corners for the search bar */
+  }
+
+  button {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .restaurant-item {
+    cursor: pointer;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: aliceblue;
+    border-color: rgb(21, 167, 26);
+    border-radius: 10px; /* Added border-radius for rounded corners */
+    box-shadow: 0 0 15px rgba(21, 167, 26, 0.4);/* Corrected box shadow value */
+    display: flex;
+    align-items: center;
+  }
+
+  .restaurant-logo {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+    border-radius: 5px; /* Added border-radius for rounded corners */
+  }
+
+  #results {
+    /* Style for displaying search results */
+  }
+
+
+  

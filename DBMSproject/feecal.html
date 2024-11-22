@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Late Fee Calculator</title>
+  <link rel="stylesheet" href="project.css">
+  <style>
+    body {
+      background-color: #01796F;
+      font-family: Arial, sans-serif;
+      color: #F4EDE1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .calculator-container {
+      background-color: #6B8E4E;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px #2D4A27;
+      text-align: center;
+    }
+    label, input {
+      display: block;
+      margin: 10px 0;
+      font-size: 1.1em;
+    }
+    input[type="date"] {
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #2D4A27;
+    }
+    button {
+      background-color: #D27D2D;
+      color: #F4EDE1;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator-container">
+    <h1>Late Fee Calculator</h1>
+    <label for="borrow-date">Borrow Date:</label>
+    <input type="date" id="borrow-date" required>
+    
+    <label for="return-date">Return Date:</label>
+    <input type="date" id="return-date" required>
+    
+    <button onclick="calculateLateFee()">Calculate Fine</button>
+    
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculateLateFee() {
+  const borrowDate = new Date(document.getElementById("borrow-date").value);
+  const returnDate = new Date(document.getElementById("return-date").value);
+  const resultElement = document.getElementById("result");
+
+  // Calculate the difference in time (milliseconds)
+  const differenceInTime = returnDate - borrowDate;
+  
+  // Convert the difference to days
+  const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+  // If the return date is within 4 days of the borrow date
+  if (differenceInDays <= 14) {
+    resultElement.innerHTML = "No fine! The book was returned on time.";
+  } else {
+    // Calculate the number of late days
+    const lateDays = differenceInDays - 14;
+    
+    // Calculate fine: Rs.60 for each late day
+    const fine = lateDays * 60;
+    
+    resultElement.innerHTML = `Late by ${lateDays} days. Fine: ₹${fine.toFixed(2)}`;
+  }
+}
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+body{
+    background-color:aquamarine;
+    font-family: Arial, sans-serif;
+
+}
+header button{
+    background-color: aquamarine;
+    border: 0;
+    font-size: 15px;
+    font-weight: bolder;
+    color:rgb(66, 29, 2) ;
+    display: inline;
+    margin-left: 20px;
+}
+
+header button:hover{
+    text-decoration-line: underline;
+    color: blue;
+}
+header h1{
+    color: #F62A90;
+    text-decoration-color: #F62A90;
+    font-family: Brush Script MT;
+    font-size:75px;
+    margin-left: 10px;
+    padding-top: 0px;
+    display: inline;
+}
+
+#image{
+    display:inline;
+}
+
+.restaurant h2 {
+    font-family:  'Lucida Sans', sans-serif;
+    font-size: 55px;
+    color: maroon;
+    font-weight: bolder;
+    display: inline;
+    display: flex;
+    flex-direction:row;
+    justify-content:space-around;
+    
+};
+
+
+
+.restaurant #i {
+    display: inline;
+    margin-left: 900px;
+}
+
+.catchline {
+    display: inline;
+    display: flex;
+    flex-direction:row;
+    justify-content:space-around;
+    font-family: Impact, sans-serif;
+    font-weight: lighter;
+    color:darkblue;
+    margin-top: 0px;
+    
+}
+
+.description{
+    margin-left:  100px;
+    margin-right: 100px;
+    margin-top: 20px;
+    align-content: center;
+    align-items: center;
+    align-self: center;
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+    color: darkslateblue;
+}
+
+.restaurant{
+    background-color: aliceblue;
+}
+

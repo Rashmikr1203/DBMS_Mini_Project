@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Search</title>
+  <link rel="stylesheet" href="project1.css">
+</head>
+<body>
+  <header style="background-color: aquamarine;">
+    <h1>Library</h1>
+    <button onclick="window.location.href = '4a.html'">Home</button>
+    <button onclick="window.location.href = 'aboutus.html'">About Us</button>
+    <button onclick="window.location.href = 'aboutus.html#contact'">Contact Us</button>
+    <button onclick="window.location.href = 'rest.html'">Plagiarism Check</button>
+    <button onclick="window.location.href = 'account.html'" style="margin-left: 350px;">My Account</button>
+    <div id="image"><img src="account-icon.png" alt="account-icon" height="25px" width="40px"></div>
+  </header>
+
+  <h2>Search for a Book</h2>
+  
+  <section>
+    <label for="searchType">Search by:</label>
+    <select id="searchType">
+      <option value="title">Title</option>
+      <option value="author">Author</option>
+      <option value="ISBN">ISBN</option>
+    </select>
+    <input type="text" id="searchInput" placeholder="Enter search term..." />
+    <button onclick="searchBook()">Search</button>
+  </section>
+  
+  <section id="bookResults">
+    <!-- Display search results here -->
+  </section>
+  
+  <section id="transactionDetails">
+    <!-- Display transaction details here after borrowing -->
+  </section>
+
+  <script>
+    // Function to search for a book by title, author, or ISBN
+    async function searchBook() {
+      const searchType = document.getElementById('searchType').value;
+      const searchInput = document.getElementById('searchInput').value;
+
+      const resultsContainer = document.getElementById('bookResults');
+      resultsContainer.innerHTML = '';
+
+      if (!searchInput) {
+        alert('Please enter a search term');
+        return;
+      }
+
+      // Perform fetch request to search for books
+      try {
+        const response = await fetch(`http://localhost:3000/searchBook?${searchType}=${encodeURIComponent(searchInput)}`);
+        console.log(`Searching for books with ${searchType}: ${searchInput}`);
+
+        if (response.ok) {
+          const books = await response.json();
+          displayBooks(books);
+        } else if (response.status === 404) {
+          resultsContainer.innerHTML = '<p>No books found matching the criteria.</p>';
+        } else {
+          resultsContainer.innerHTML = '<p>Error retrieving book data.</p>';
+        }
+      } catch (error) {
+        console.error('Error fetching book data:', error);
+        resultsContainer.innerHTML = '<p>Could not retrieve book data. Check server connection.</p>';
+      }
+    }
+
+    // Function to display books in the DOM
+    function displayBooks(books) {
+      const resultsContainer = document.getElementById('bookResults');
+      if (books.length === 0) {
+        resultsContainer.innerHTML = '<p>No matching books found.</p>';
+      } else {
+        books.forEach(book => {
+          const bookElement = document.createElement('div');
+          bookElement.classList.add('book-item');
+
+          let bookContent = `
+            <h3>${book.title}</h3>
+            <p>Author: ${book.author}</p>
+            <p>ISBN: ${book.ISBN}</p>
+            <p>Publisher: ${book.publisher}</p>
+          `;
+          
+          if (book.availability === 1) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const userName = urlParams.get('user_name') || urlParams.get('staff_name') || "defaultUser";
+            bookContent += `<button onclick="borrowBook('${encodeURIComponent(book.title)}', '${encodeURIComponent(userName)}')">Borrow Book</button>`;
+          } else {
+            bookContent += `<span>Currently unavailable</span>`;
+          }
+
+          bookElement.innerHTML = bookContent;
+          resultsContainer.appendChild(bookElement);
+        });
+      }
+    }
+
+    // Function to handle borrowing a book
+    async function borrowBook(bookTitle, userName) {
+      console.log('Attempting to borrow book:', bookTitle, 'for user:', userName); // Debugging log for book title and user
+
+      try {
+        const response = await fetch('http://localhost:3000/submitTransactionForm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            book_title: decodeURIComponent(bookTitle),
+            user_name: decodeURIComponent(userName)
+          })
+        });
+
+        if (!response.ok) {
+          console.error('Failed to borrow book:', response.statusText); // More detailed error logging
+          throw new Error('Failed to borrow book');
+        }
+
+        const transactionDetails = await response.json();
+        document.getElementById('transactionDetails').innerHTML = `
+          <div>
+            <p><strong>User Name:</strong> ${transactionDetails.user_name}</p>
+            <p><strong>Book Title:</strong> ${transactionDetails.book_title}</p>
+            <p><strong>Book ID:</strong> ${transactionDetails.book_id}</p>
+            <p><strong>Item Type:</strong> ${transactionDetails.item_type}</p>
+            <p><strong>Date Borrowed:</strong> ${new Date(transactionDetails.date_borrowed).toLocaleDateString()}</p>
+            <p><strong>Return Date:</strong> ${new Date(transactionDetails.return_date).toLocaleDateString()}</p>
+          </div>
+        `;
+      } catch (error) {
+        console.error('Error borrowing book:', error);
+        alert('There was an error borrowing the book. Please check your network or server connection.');
+      }
+    }
+  </script>
+
+  <footer>
+    <p>&copy; Library 2023</p>
+  </footer>
+</body>
+</html>

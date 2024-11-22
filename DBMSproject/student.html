@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <style>
+    body {
+      background-color: aquamarine;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      color: #f62a90;
+      font-family: 'Brush Script MT', cursive;
+      font-size: 40px;
+      text-align: center;
+    }
+
+    .App {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .menu-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 0;
+    }
+
+    .student-item {
+      border: 1px solid #15a71a;
+      border-radius: 8px;
+      background-color: aliceblue;
+      margin: 10px;
+      padding: 10px;
+      width: 300px;
+      box-shadow: 0 0 15px #15a71a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .student-item-image {
+      width: 100%;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .student-item-details {
+      text-align: center;
+    }
+
+    .student-function-button {
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      padding: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+  <title>Student Page</title>
+  <link rel="stylesheet" href="project1.css">
+</head>
+
+<body>
+  <div id="text"></div>
+  <header style="background-color: aquamarine;">
+    <button type="button" onclick="window.location.href = '4a.html'">Home</button>
+    <button type="button" onclick="window.location.href = 'aboutus.html'">About Us</button>
+    <button type="button" onclick="window.location.href = 'aboutus.html#contact'">Contact Us</button>
+    <button type="button" onclick="window.location.href = 'rest.html'">Our Restaurants</button>
+    <button type="button" onclick="window.location.href = 'account.html'" style="margin-left: 400px;">My Account</button>
+    <img src="account-icon.png" alt="account-icon" height="25px" width="40px" style="display: inline-block;">
+  </header>
+  
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // Import React hooks
+    const { useState } = React;
+
+    class Header extends React.Component {
+      render() {
+        return (
+          <div style={{ fontSize: "30px", textAlign: "center" }}>
+            <h1>Library</h1>
+          </div>
+        );
+      }
+    }
+    ReactDOM.render(<Header />, document.getElementById("text"));
+
+    // Component for rendering each menu item
+    function StudentItem({ item }) {
+      // Handler for redirecting to 4a.html with user_name as a query parameter
+      const handleRedirect = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const userName = urlParams.get("user_name");
+
+        // Redirect to 4a.html with user_name as a query parameter
+        // Redirect to a page named after the item's name (e.g., "Search.html" for "Search" item)
+        window.location.href = `${item.name}.html${userName ? `?user_name=${encodeURIComponent(userName)}` : ''}`;
+
+      };
+
+      return (
+        <li className="student-item">
+          <img className="student-item-image" src={item.image} alt={item.name} />
+          <div className="student-item-details">
+            <h3>{item.name}</h3>
+            <button className="student-function-button" type="button" onClick={handleRedirect}>
+              {item.name}
+            </button>
+          </div>
+        </li>
+      );
+    }
+
+    // Main App component
+    function App() {
+      const studentData = [
+        { name: "Search", image: "path/to/imageA.jpg" },
+        { name: "Plagiarism Check", image: "path/to/imageB.jpg" },
+      ];
+
+      return (
+        <div className="App">
+          <ul className="menu-list">
+            {studentData.map((item, index) => (
+              <StudentItem key={index} item={item} />
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+    // Render the App component to the root element
+    ReactDOM.render(<App />, document.getElementById("root"));
+  </script>
+</body>
+</html>

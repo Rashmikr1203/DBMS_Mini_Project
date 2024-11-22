@@ -1,0 +1,27 @@
+body{
+    background-color:aquamarine;
+    font-family: Arial, sans-serif;
+}
+.heading {
+    color: black;
+    font-size: 2em;
+    text-align:"center";
+  }
+  
+  .loginButton {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  a {
+    color: black;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+
+  

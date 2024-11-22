@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Search</title>
+  <style>
+    body {
+      background-color: #01796F;
+      font-family: Arial, sans-serif;
+      color: #F4EDE1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .search-container {
+      background-color: #6B8E4E;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px #2D4A27;
+      width: 80%;
+      max-width: 500px;
+      margin-bottom: 20px;
+    }
+    .result-item {
+      background-color: #F4EDE1;
+      color: #2D4A27;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .result-item h3, .result-item p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Book Search</h1>
+
+  <div class="search-container">
+    <label for="searchTitle">Title:</label>
+    <input type="text" id="searchTitle" placeholder="Enter book title">
+    
+    <label for="searchAuthor">Author:</label>
+    <input type="text" id="searchAuthor" placeholder="Enter author name">
+    
+    <button onclick="searchBooks()">Search</button>
+  </div>
+
+  <div id="results"></div>
+
+  <script>
+    function searchBooks() {
+      const title = document.getElementById('searchTitle').value;
+      const author = document.getElementById('searchAuthor').value;
+      const genre = document.getElementById('searchGenre').value;
+
+      fetch(`book_search.php?title=${title}&author=${author}&genre=${genre}`)
+        .then(response => response.json())
+        .then(data => {
+          const resultsContainer = document.getElementById('results');
+          resultsContainer.innerHTML = '';
+          if (data.length > 0) {
+            data.forEach(book => {
+              const bookItem = document.createElement('div');
+              bookItem.classList.add('result-item');
+              bookItem.innerHTML = `<h3>${book.title}</h3><p>Author: ${book.author}</p><p>Genre: ${book.genre}</p>`;
+              resultsContainer.appendChild(bookItem);
+            });
+          } else {
+            resultsContainer.innerHTML = '<p>No results found.</p>';
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          document.getElementById('results').innerHTML = '<p>Error fetching data.</p>';
+        });
+    }
+  </script>
+</body>
+</html>

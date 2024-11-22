@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Inventory</title>
+  <style>
+    body {
+      background-color: #01796F;
+      font-family: Arial, sans-serif;
+      color: #F4EDE1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      max-width: 400px;
+      width: 100%;
+      padding: 20px;
+      background-color: #6B8E4E;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+    h2 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    input[type="text"],
+    input[type="number"],
+    select,
+    input[type="date"] {
+      width: 95%;
+      padding: 6px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #2D4A27;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #2D4A27;
+      color: #F4EDE1;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #D27D2D;
+    }
+  </style>
+<link rel="stylesheet" href="project1.css">
+</head>
+<body>
+  
+  <div class="container">
+    <h2>Book Inventory Management</h2>
+
+    <!-- Select operation -->
+    <label for="operation">Select Operation:</label>
+    <select id="operation" onchange="toggleFormFields()">
+      <option value="add">Add Book</option>
+      <option value="update">Update Book</option>
+      <option value="delete">Delete Book</option>
+    </select>
+
+    <!-- Inventory form -->
+    <form id="bookForm" onsubmit="handleFormSubmit(event)">
+      <label for="book_id">Book ID:</label>
+      <input type="number" id="book_id" name="book_id" required>
+
+      <label for="availability">Availability:</label>
+      <input type="number" id="availability" name="availability">
+
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title">
+
+      <label for="author">Author:</label>
+      <input type="text" id="author" name="author">
+
+      <label for="ISBN">ISBN:</label>
+      <input type="text" id="ISBN" name="ISBN">
+
+      <label for="edition">Edition:</label>
+      <input type="text" id="edition" name="edition">
+
+      <label for="publisher">Publisher:</label>
+      <input type="text" id="publisher" name="publisher">
+
+      <label for="publication_year">Publication Year:</label>
+      <input type="number" id="publication_year" name="publication_year">
+
+      <label for="is_digital">Is Digital:</label>
+      <input type="number" id="is_digital" name="is_digital">
+
+      <label for="shelf_number">Shelf Number:</label>
+      <input type="number" id="shelf_number" name="shelf_number">
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    function toggleFormFields() {
+      const operation = document.getElementById("operation").value;
+      const isDelete = operation === "delete";
+
+      document.getElementById("availability").disabled = isDelete;
+      document.getElementById("title").disabled = isDelete;
+      document.getElementById("author").disabled = isDelete;
+      document.getElementById("ISBN").disabled = isDelete;
+      document.getElementById("edition").disabled = isDelete;
+      document.getElementById("publisher").disabled = isDelete;
+      document.getElementById("publication_year").disabled = isDelete;
+      document.getElementById("is_digital").disabled = isDelete;
+      document.getElementById("shelf_number").disabled = isDelete;
+    }
+
+    async function handleFormSubmit(event) {
+      event.preventDefault();
+
+      const operation = document.getElementById("operation").value;
+      const book_id = document.getElementById("book_id").value;
+      const availability = document.getElementById("availability").value;
+      const title = document.getElementById("title").value;
+      const author = document.getElementById("author").value;
+      const ISBN = document.getElementById("ISBN").value;
+      const edition = document.getElementById("edition").value;
+      const publisher = document.getElementById("publisher").value;
+      const publication_year = document.getElementById("publication_year").value;
+      const is_digital = document.getElementById("is_digital").value;
+      const shelf_number = document.getElementById("shelf_number").value;
+
+      const data = {
+        book_id,
+        availability,
+        title,
+        author,
+        ISBN,
+        edition,
+        publisher,
+        publication_year,
+        is_digital,
+        shelf_number
+      };
+
+      let endpoint = "";
+      if (operation === "add") endpoint = "http://localhost:3000/addBook";
+      else if (operation === "update") endpoint = "http://localhost:3000/updateBook";
+      else if (operation === "delete") endpoint = "http://localhost:3000/deleteBook";
+
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.text(); // Expecting plaintext response
+        alert(result); // Display the plaintext message from the server
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+
+    toggleFormFields();
+  </script>
+</body>
+</html>

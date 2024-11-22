@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <link rel="stylesheet" href="project.css">
+  <title>Trigger Log</title>
+  <style>
+    body {
+      background-color: #01796F;
+      font-family: Arial, sans-serif;
+      color: #F4EDE1;
+    }
+    .h2 {
+      color: rgb(180, 38, 38);
+      font-size: 2em;
+      text-align: center;
+    }
+    .log-container {
+      width: 80%;
+      margin: 20px auto;
+      background-color: #6B8E4E;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .log-item {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #2D4A27;
+      color: #F4EDE1;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header style="background-color: #D27D2D;">
+    <button onclick="window.location.href = 'home.html'"> Home </button>
+    <button onclick="window.location.href = 'about.html'"> About Us </button>
+    <button onclick="window.location.href = 'contact.html'"> Contact Us </button>
+    <button onclick="window.location.href = 'library.html'" style="margin-left: 400px;"> My Account </button>
+  </header>
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function TriggerLog() {
+      const [logs, setLogs] = useState([]);
+
+      // Fetch trigger logs from the backend (you can create an API endpoint to get this data)
+      useEffect(() => {
+        fetch('http://localhost:3000/api/getTriggerLogs') // Assuming you have an API endpoint set up to fetch logs
+          .then(response => response.json())
+          .then(data => setLogs(data))
+          .catch(error => console.error('Error fetching logs:', error));
+      }, []);
+
+      return (
+        <div className="log-container">
+          <h2>Trigger Log</h2>
+          {logs.length > 0 ? (
+            logs.map((log, index) => (
+              <div className="log-item" key={index}>
+                <p><strong>Action:</strong> {log.action_type}</p>
+                <p><strong>Book ID:</strong> {log.book_id}</p>
+                <p><strong>Title:</strong> {log.title}</p>
+                <p><strong>Publisher:</strong> {log.publisher}</p>
+                <hr />
+              </div>
+            ))
+          ) : (
+            <p>No logs found.</p>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.render(<TriggerLog />, document.getElementById('root'));
+  </script>
+</body>
+</html>

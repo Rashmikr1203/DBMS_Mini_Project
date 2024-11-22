@@ -1,0 +1,77 @@
+header h1{
+    color: #F62A90;
+    text-decoration-color: #F62A90;
+    font-family: Brush Script MT;
+    font-size:75px;
+    margin-left: 10px;
+    padding-top: 0px;
+    display: inline;
+}
+
+.bg-image{
+    position: absolute;
+    top: 200;
+    left: 0;
+    width: 100%;
+    height: 600px;
+
+    z-index: -1; /* Place the background image behind the text */
+    opacity: 0.4;
+    margin-left: 0px;
+}
+#image{
+    display:inline;
+}
+header button{
+    background-color: aquamarine;
+    border: 0;
+    font-size: 15px;
+    font-weight: bolder;
+    color:rgb(66, 29, 2) ;
+    display: inline;
+    margin-left: 20px;
+}
+
+header button:hover{
+    text-decoration-line: underline;
+    color: blue;
+}
+
+#h1{
+    background-color: aliceblue;
+    
+}
+ h2{
+    color: rgb(39, 4, 136);
+    margin-left: 50px;
+    font-size: 70px;
+    margin-bottom: 30px;
+    margin-right: 00px;
+    text-align: center;
+}
+
+#h1 h3{
+    color: rgb(79, 36, 5);
+    margin-left: 28px;
+    margin-right: 28px;
+    font-size: 19px;
+    margin-top: 20px;
+    text-align: center;
+}
+body{
+    background-color:aquamarine;
+    font-family: Arial, sans-serif;
+
+}
+form{
+    margin-left: 50px;
+    text-align: center;
+}
+p{
+    text-align: center;
+    margin-left: 70px;
+    margin-right: 70px;
+}
+
+
+  

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <link rel="stylesheet" href="project.css">
+  <title>Library Staff Operations</title>
+  <style>
+    body {
+      background-color: #01796F;
+      font-family: Arial, sans-serif;
+      color: #F4EDE1;
+    }
+    .h2 {
+      color: rgb(180, 38, 38);
+      font-size: 2em;
+      text-align: center;
+    }
+    .App {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .menu-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 0;
+    }
+    .menu-item {
+      border: 1px solid #2D4A27;
+      border-radius: 8px;
+      background-color: #6B8E4E;
+      margin: 10px;
+      padding: 10px;
+      width: 300px;
+      box-shadow: 0 0 15px #2D4A27;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .menu-item:hover {
+      transform: scale(1.05);
+    }
+    h1 {
+      color: #3B2C27;
+      font-family: 'Brush Script MT', cursive;
+      font-size: 40px;
+    }
+  </style>
+</head>
+
+<body>
+  <header style="background-color: #D27D2D;">
+    <button onclick="window.location.href = 'home.html'"> Home </button>
+    <button onclick="window.location.href = 'about.html'"> About Us </button>
+    <button onclick="window.location.href = 'contact.html'"> Contact Us </button>
+    <button onclick="window.location.href = 'library.html'" style="margin-left: 400px;"> My Account </button>
+  </header>
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // Function to extract the query parameter from the URL
+    const getQueryParam = (param) => {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);  // Return the value of the parameter
+    };
+
+    // Extract the staff_name from the current URL (current page's URL)
+    const staffName = getQueryParam('staff_name');
+    console.log(staffName);  // Log to check if staff_name is being extracted properly
+
+    // Operations data
+    const operationsData = [
+      {
+        name: "Library Staff Operations",
+        items: [
+          {
+            name: 'Late Fee Calculator',
+            description: 'Calculate fines by entering borrow and return dates.',
+            url: 'feecal.html',
+          },
+          {
+            name: 'Book Search',
+            description: 'Search for books by title, or author.',
+            url: 'Search.html',
+          },
+          {
+            name: 'User Management',
+            description: 'Add, update, or remove users from the library system.',
+            url: 'usermanageent.html',
+          },
+          {
+            name: 'Book Inventory',
+            description: 'Manage the book inventory: add, remove, or update book info.',
+            url: 'bokinventory.html',
+          },
+          {
+            name: 'Generate Report',
+            description: 'Generate reports for users or books in the system.',
+            url: 'GenerateReport.html',
+          },
+          {
+            name: 'Return Book',
+            description: 'Process book returns and update records.',
+            url: 'returnbook.html',
+          },
+          {
+            name: 'Log Report',
+            description: 'Trigger or view log reports for activities.',
+            url: 'triggerlog.html',
+          },
+        ],
+      },
+    ];
+
+    function OperationItem({ item }) {
+      // Append the staff_name to the URL before redirecting
+      const handleRedirect = () => {
+        let redirectUrl = item.url;
+        if (staffName) {
+          redirectUrl = `${redirectUrl}?staff_name=${encodeURIComponent(staffName)}`;
+        } else {
+          console.warn("staff_name not found in URL.");
+        }
+        window.location.href = redirectUrl;
+      };
+
+      return (
+        <li className="menu-item" onClick={handleRedirect}>
+          <div>
+            <h3>{item.name}</h3>
+            <p>{item.description}</p>
+          </div>
+        </li>
+      );
+    }
+
+    function App() {
+      const [selectedOperation, setSelectedOperation] = useState(operationsData[0].name);
+
+      return (
+        <div className="App">
+          <h1>Library Staff Operations</h1>
+          <h2 style={{ color: '#F4EDE1' }}>{selectedOperation}</h2>
+          <ul className="menu-list">
+            {operationsData[0].items.map((item) => (
+              <OperationItem key={item.name} item={item} />
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>

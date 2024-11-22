@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Library Reports</title>
+  <style>
+    body {
+      background-color: #01796F;
+      font-family: Arial, sans-serif;
+      color: #F4EDE1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      max-width: 400px;
+      width: 100%;
+      padding: 20px;
+      background-color: #6B8E4E;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+    h2 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    select {
+      width: 100%;
+      padding: 6px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid #2D4A27;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #2D4A27;
+      color: #F4EDE1;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #D27D2D;
+    }
+    .report-output {
+      margin-top: 20px;
+      font-size: 14px;
+      background-color: #F4EDE1;
+      color: #2D4A27;
+      padding: 10px;
+      border-radius: 5px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Library Report Generator</h2>
+
+    <!-- Select report type -->
+    <label for="reportType">Select Report:</label>
+    <select id="reportType" onchange="fetchReport()">
+      <option value="user">User Report</option>
+      <option value="book">Book Report</option>
+    </select>
+
+    <!-- Button to generate report -->
+    <button onclick="fetchReport()">Generate Report</button>
+
+    <!-- Display report results here -->
+    <div id="reportOutput" class="report-output"></div>
+  </div>
+
+  <script>
+    async function fetchReport() {
+      // Get the selected report type
+      const reportType = document.getElementById("reportType").value;
+
+      // Determine endpoint based on report type
+      const endpoint = reportType === "user" 
+        ? "http://localhost:3000/genReportUser" 
+        : "http://localhost:3000/genReportBook";
+
+      try {
+        // Fetch the report data
+        const response = await fetch(endpoint);
+        const data = await response.json();
+
+        // Display report in the output div
+        const reportOutput = document.getElementById("reportOutput");
+        reportOutput.style.display = "block";
+        reportOutput.innerHTML = `<h3>${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report</h3>`;
+        reportOutput.innerHTML += "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+
+      } catch (error) {
+        console.error("Error fetching report:", error);
+      }
+    }
+  </script>
+</body>
+</html>

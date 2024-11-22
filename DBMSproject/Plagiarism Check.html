@@ -1,0 +1,233 @@
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foodweb</title>
+  <link rel="stylesheet" href="project1.css">
+</head>
+<body>
+  <header style="background-color: aquamarine;">
+    <h1>FoodWeb</h1>
+    <button type="submit" onclick="window.location.href = '4.html'"> Home </button>
+    <button type ="submit" onclick="window.location.href = 'aboutus.html'"> About Us</button>
+    <button type ="submit" onclick="window.location.href = 'aboutus.html#contact'"> Contact Us </button>
+    <button type ="submit" onclick="window.location.href = 'rest.html'"> Our Restaurants </button>
+    <button type ="submit" onclick="window.location.href = 'account.html'" style="margin-left: 350px; padding-right: 10px;"> My Account</button>
+    <div id = "image">
+    <img src = "account-icon.png" alt = "account-icon"height="25px" width="40px">
+
+    
+    </div>
+  </header>
+
+  <img class="bg-image" src = "https://www.tastingtable.com/img/gallery/what-makes-restaurant-burgers-taste-different-from-homemade-burgers-upgrade/l-intro-1662064407.jpg " >
+  
+  <div id = "h1">
+  <h2>Order Food Online</h2>
+  <h3 style="font-style: italic;"> Anytime, Anywhere</h3>
+    
+
+  <section>
+    <input type="text" id="searchInput" placeholder="Search for restaurants..." oninput="handleInput(event)">
+    <button onclick="searchRestaurants()">Search</button>
+      <button type="submit"><img src="search-icon.png" alt="Search" height="10px" width="10px" ></button>
+    </section>
+   
+    <section id="results">
+      
+    </section>
+    <script type="text/javascript">
+      // Simulated restaurant data
+      const pizzaRestaurants = [
+        { id: 1, name: 'TasteBuds Delight', motto: "Savor the Symphony of Flavors!", logo: 'tastebuds delight.jpeg' },
+        { id: 2, name:'Spice Paradise', motto: "Ignite Your Senses with Spice!", logo: 'spice paradise.jpeg' },
+        { id: 3, name: 'Nectar & Nosh', motto: "Where Every Bite is Pure Bliss!", logo: 'nectar and nosh.jpeg' },
+        { id: 4, name:'Urban Harvest', motto: "Farm to Table, Fresh to Fork!", logo: 'urban harvest.jpeg' },
+      ];
+  
+      const pastaRestaurants = [
+        { id: 1, name: 'TasteBuds Delight', motto: "Savor the Symphony of Flavors!", logo: 'tastebuds delight.jpeg' },
+        { id: 2, name:'Spice Paradise', motto: "Ignite Your Senses with Spice!", logo: 'spice paradise.jpeg' },
+        { id: 4, name:'Urban Harvest', motto: "Farm to Table, Fresh to Fork!", logo: 'urban harvest.jpeg' },
+        { id: 5, name: "Ocean's Bounty", motto: "Dive into the Sea of Flavors!", logo: "ocean's bounty.jpeg" },
+      ];
+  
+      const burgerRestaurants = [
+        { id: 2, name:'Spice Paradise', motto: "Ignite Your Senses with Spice!", logo: 'spice paradise.jpeg' },
+        { id: 3, name: 'Nectar & Nosh', motto: "Where Every Bite is Pure Bliss!", logo: 'nectar and nosh.jpeg' },
+        { id: 4, name:'Urban Harvest', motto: "Farm to Table, Fresh to Fork!", logo: 'urban harvest.jpeg' },
+        { id: 5, name: "Ocean's Bounty", motto: "Dive into the Sea of Flavors!", logo: "ocean's bounty.jpeg" },
+      ];
+  
+      function searchRestaurants() {
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const resultsContainer = document.getElementById('results');
+        resultsContainer.innerHTML = ''; // Clear previous results
+  
+        let matchingRestaurants = [];
+  
+        switch (searchInput) {
+          case 'pizza':
+            matchingRestaurants = pizzaRestaurants;
+            break;
+          case 'pasta':
+            matchingRestaurants = pastaRestaurants;
+            break;
+          case 'burger':
+            matchingRestaurants = burgerRestaurants;
+            break;
+          default:
+            break;
+        }
+  
+        if (matchingRestaurants.length === 0) {
+          resultsContainer.innerHTML = '<p>No matching restaurants found.</p>';
+        } else {
+          matchingRestaurants.forEach(restaurant => {
+            const restaurantElement = document.createElement('div');
+            restaurantElement.classList.add('restaurant-item');
+            restaurantElement.innerHTML = `
+                          <img src="${restaurant.logo}" alt="${restaurant.name} Logo" class="restaurant-logo">
+                          <div>
+                              <h3>${restaurant.name}</h3>
+                              <p>${restaurant.motto}</p>
+                          </div>`;
+            restaurantElement.addEventListener('click', () => viewMenu(restaurant.id));
+            resultsContainer.appendChild(restaurantElement);
+          });
+        }
+      }
+  
+      function viewMenu(restaurantId) {
+        // Redirect to the menu page based on the restaurant ID
+        window.location.href = `menu_${restaurantId}.html`; // Adjust the URL structure as needed
+      }
+  
+      function handleInput(event) {
+        if (event.key === 'Enter') {
+          searchRestaurants();
+        }
+      }
+    </script>
+</div>
+<center>
+  <img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Pizza-3007395.jpg/800px-Pizza-3007395.jpg" height="200px" width="400px" style="margin-left: 400px; margin-top: 60px; display: inline-block; margin:  70px; opacity: 0.8; align-items: center;">
+  <img src = "https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg" style="display: inline-block;  height: 200px; width: 400px;  margin: 70px; opacity: 0.8; align-items: center; align-content: center;">
+</center>
+
+
+
+  <footer>
+    <h1 style="font-size: large; margin-top:40px"> Social Media Links: <a href="https://www.instagram.com" >Instagram </a> </h1>
+    <h1 style="font-size: large; margin-left: 170px;"> <a href="https://www.youtube.com" >Youtube </a></h1>
+    <p style=" margin-left: 1110px; display: inline;">&copy; Foodweb 2023</p>
+  </footer>
+</body>
+</html>
+-->
+<!--<!DOCTYPE html>
+<html>
+    <head>
+        <title>FoodWeb Homepage</title>        
+    </head>
+
+    <body>
+
+    </body>
+    
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foodweb</title>
+  <link rel="stylesheet" href="project1.css">
+</head>
+<body>
+  <header style="background-color: aquamarine;">
+    <h1>Library</h1>
+    <button type="submit" onclick="window.location.href = '4.html'"> Home </button>
+    <button type ="submit" onclick="window.location.href = 'aboutus.html'"> About Us</button>
+    <button type ="submit" onclick="window.location.href = 'aboutus.html#contact'"> Contact Us </button>
+    <button type ="submit" onclick="window.location.href = 'rest.html'"> Plagiarism Check </button>
+    <button type ="submit" onclick="window.location.href = 'account.html'" style="margin-left: 350px; padding-right: 10px;"> My Account</button>
+    <div id = "image">
+    <img src = "account-icon.png" alt = "account-icon"height="25px" width="40px">
+
+    
+    </div>
+  </header>
+
+  <h2>Search for a Book</h2>
+  
+  <section>
+    <label for="searchType">Search by:</label>
+    <select id="searchType">
+      <option value="title">Title</option>
+      <option value="author">Author</option>
+      <option value="ISBN">ISBN</option>
+    </select>
+    <input type="text" id="searchInput" placeholder="Enter search term..." />
+    <button onclick="searchBook()">Search</button>
+  </section>
+  
+  <section id="bookResults">
+    <!-- Display search results here -->
+  </section>
+
+  <script>
+    async function searchBook() {
+      const searchType = document.getElementById('searchType').value;
+      const searchInput = document.getElementById('searchInput').value;
+      
+      // Clear previous results
+      const resultsContainer = document.getElementById('bookResults');
+      resultsContainer.innerHTML = '';
+
+      if (!searchInput) {
+        alert('Please enter a search term');
+        return;
+      }
+
+      // Fetch request to server-side /searchBook
+      try {
+        const response = await fetch(`http://localhost:3000/searchBook?${searchType}=${encodeURIComponent(searchInput)}`);
+        
+        if (response.ok) {
+          const books = await response.json();
+          
+          if (books.length === 0) {
+            resultsContainer.innerHTML = '<p>No matching books found.</p>';
+          } else {
+            books.forEach(book => {
+              const bookElement = document.createElement('div');
+              bookElement.classList.add('book-item');
+              bookElement.innerHTML = `
+                <h3>${book.title}</h3>
+                <p>Author: ${book.author}</p>
+                <p>ISBN: ${book.ISBN}</p>
+                <p>Publisher: ${book.publisher}</p>
+              `;
+              resultsContainer.appendChild(bookElement);
+            });
+          }
+        } else {
+          resultsContainer.innerHTML = '<p>Error retrieving book data.</p>';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        resultsContainer.innerHTML = '<p>Error retrieving book data.</p>';
+      }
+    }
+  </script>
+
+  <footer>
+    <p>&copy; Library 2023</p>
+  </footer>
+</body>
+</html>

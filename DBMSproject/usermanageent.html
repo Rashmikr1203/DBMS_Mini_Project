@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Management</title>
+  <style>
+    body {
+      background-color: #01796F;
+      font-family: Arial, sans-serif;
+      color: #F4EDE1;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #6B8E4E;
+      border-radius: 10px;
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #2D4A27;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #2D4A27;
+      color: #F4EDE1;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #D27D2D;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>User Management</h2>
+
+    <!-- Select operation -->
+    <label for="operation">Select Operation:</label>
+    <select id="operation" onchange="toggleFormFields()">
+      <option value="add">Add User</option>
+      <option value="update">Update User</option>
+      <option value="delete">Delete User</option>
+    </select>
+
+    <!-- User form -->
+    <form id="userForm" onsubmit="handleFormSubmit(event)">
+      <label for="user_id">User ID:</label>
+      <input type="number" id="user_id" name="user_id" required>
+
+      <div id="optionalFields">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name">
+
+        <label for="role">Role:</label>
+        <input type="text" id="role" name="role">
+
+        <label for="email_id">Email ID:</label>
+        <input type="email" id="email_id" name="email_id">
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+
+        <label for="email_notification">Email Notification:</label>
+        <select id="email_notification" name="email_notification">
+          <option value="true">Enabled</option>
+          <option value="false">Disabled</option>
+        </select>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    // Toggle form fields based on the selected operation
+    function toggleFormFields() {
+      const operation = document.getElementById("operation").value;
+      const userIdField = document.getElementById("user_id");
+      const optionalFields = document.getElementById("optionalFields");
+
+      // If the operation is "add", hide user_id field
+      if (operation === "add") {
+        userIdField.style.display = "none";  // Hide user_id input field for "add" operation
+      } else {
+        userIdField.style.display = "block";  // Show user_id input field for "update" and "delete"
+      }
+
+      // If the operation is delete, hide optional fields
+      if (operation === "delete") {
+        optionalFields.style.display = "none";
+      } else {
+        optionalFields.style.display = "block";
+      }
+    }
+
+    // Function to handle form submission
+    async function handleFormSubmit(event) {
+      event.preventDefault(); // Prevent form from submitting the default way
+
+      const operation = document.getElementById("operation").value;
+      
+      let userId = document.getElementById("user_id").value;  // Correctly fetching user_id from form
+
+      // Convert user_id to integer to ensure correct datatype
+      userId = parseInt(userId, 10);
+
+      // Check if the user_id is a valid integer (only for 'update' or 'delete' operation)
+      if (operation !== "add" && isNaN(userId)) {
+        alert("User ID must be a valid integer!");
+        return;
+      }
+
+      // Log the value and type of user_id for debugging
+      console.log("user_id:", userId, "Type:", typeof userId);
+
+      // Data object, but we exclude user_id for 'add' and 'update' operations
+      let data = {};
+
+      // If the operation is 'update' or 'delete', include user_id
+      if (operation !== "add") {
+        data.user_id = userId;
+      }
+
+      // For 'add', 'update' and 'delete' operations, include additional fields
+      if (operation !== "delete") {
+        const name = document.getElementById("name").value;
+        const role = document.getElementById("role").value;
+        const email_id = document.getElementById("email_id").value;
+        const password = document.getElementById("password").value;
+        const email_notification = document.getElementById("email_notification").value === 'true';
+
+        // Add additional fields to data
+        data = { ...data, name, role, email_id, password, email_notification };
+      }
+
+      // Log the entire data object and its types before sending
+      console.log("Data to be sent:", JSON.stringify(data));
+
+      // Set the endpoint based on the operation selected
+      let endpoint = "";
+      if (operation === "add") endpoint = "http://localhost:3000/submitUserForm";
+      if (operation === "update") endpoint = "http://localhost:3000/updateUser";
+      if (operation === "delete") endpoint = "http://localhost:3000/deleteUser";
+
+      try {
+        // Send data to the server using fetch
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data) // Convert data object to JSON
+        });
+
+        // Parse the response as plaintext
+        const result = await response.text();  // Changed to text parsing for plaintext response
+
+        // Check if the response was successful
+        if (response.ok) {
+          alert(result || 'Operation successful!');
+        } else {
+          console.warn('Server responded with an error:', result);
+          alert(result || 'Operation failed!');
+        }
+      } catch (error) {
+        console.error("Network error:", error);
+        alert('An error occurred while submitting the form. Please try again later.');
+      }
+    }
+
+    // Initialize form visibility on page load
+    toggleFormFields();
+  </script>
+</body>
+</html>

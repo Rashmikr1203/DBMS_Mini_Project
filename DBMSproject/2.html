@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Information</title>
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="project.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div id="userInformation"></div>
+
+  <script type="text/babel">
+    class Header extends React.Component {
+      render() {
+        return (
+          <div style={{ fontSize: "30px" }}>
+            <h1 style={{ color: "#F62A90", fontFamily: "Brush Script MT" }}>Library</h1>
+          </div>
+        );
+      }
+    }
+
+    class UserInformation extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          name: '',
+          role: '',
+          email_id: '',
+          password: '', // Added password field
+        };
+      }
+
+      handleSubmit = async (event) => {
+  event.preventDefault();
+
+  try {
+    const response = await fetch('http://localhost:3000/submitUserForm', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(this.state),
+    });
+
+    if (response.ok) {
+      const result = await response.text(); // Expecting plain text response from server
+      alert(result || 'Form submitted successfully');
+      
+      // Reset form data if needed
+      this.setState({
+        name: '',
+        role: '',
+        email_id: '',
+        password: '', // Reset password field
+      });
+    } else {
+      const errorText = await response.text(); // Get error message if available
+      alert(errorText || 'Form submission failed');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('An error occurred while submitting the form.');
+  }
+};
+
+
+      handleChange = (event) => {
+        const { name, value } = event.target;
+        this.setState((prevState) => ({ ...prevState, [name]: value }));
+      };
+
+      render() {
+        return (
+          <div style={{ marginTop: "5%", marginLeft: "25%", marginRight: "25%", backgroundColor: "pink", textAlign: "center" }}>
+            <h1 className="heading">User Information</h1>
+            <p>Create a new account</p>
+            <form onSubmit={this.handleSubmit}>
+              <div>
+                <label>Username:</label>
+                <input type="text" name="name" placeholder="Enter user name" value={this.state.name} onChange={this.handleChange} required />
+              </div>
+              <div>
+                <label>Role:</label>
+                <input type="text" name="role" placeholder="Enter role" value={this.state.role} onChange={this.handleChange} required />
+              </div>
+              <div>
+                <label>Email_id:</label>
+                <input type="email" name="email_id" placeholder="Enter email_id" value={this.state.email_id} onChange={this.handleChange} required />
+              </div>
+              <div>
+                <label>Password:</label>
+                <input type="password" name="password" placeholder="Enter password" value={this.state.password} onChange={this.handleChange} required />
+              </div>
+              <button type="submit" className="loginButton" style={{ color: "white" }}>Submit form</button>
+            </form>
+            <p>Already on Library? <a href="3.html">Sign In</a></p>
+            <button className="loginButton"><a href="1.html">Go back to home page</a></button>
+          </div>
+        );
+      }
+    }
+
+    ReactDOM.render(<Header />, document.getElementById('header'));
+    ReactDOM.render(<UserInformation />, document.getElementById('userInformation'));
+  </script>
+
+</body>
+</html>

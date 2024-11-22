@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Information</title>
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="project.css">
+</head>
+<body style="background-color: #01796F; font-family: Arial, sans-serif;">
+  <div id="header"></div>
+  <div id="StaffInformation"></div>
+
+  <script type="text/babel">
+    class Header extends React.Component {
+      render() {
+        return (
+          <div style={{ fontSize: "30px", textAlign: "center", marginBottom: "20px" }}>
+            <h1 style={{ color: "#3B2C27", fontFamily: "Brush Script MT" }}>Library</h1>
+          </div>
+        );
+      }
+    }
+
+    class StaffInformation extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          name: '',
+          role: '',
+          email_id: '',
+          password: '',
+        };
+      }
+
+      handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+          const response = await fetch('http://localhost:3000/submitUserForm', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(this.state),
+          });
+
+          if (response.ok) {
+            alert('Form submitted successfully');
+            this.setState({
+              name: '',
+              role: '',
+              email_id: '',
+              password: '',
+            });
+          } else {
+            alert('Form submission failed');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+
+      handleChange = (event) => {
+        const { name, value } = event.target;
+        this.setState((prevState) => ({ ...prevState, [name]: value }));
+      };
+
+      render() {
+        return (
+          <div style={{
+            marginTop: "5%", 
+            marginLeft: "25%", 
+            marginRight: "25%", 
+            backgroundColor: "#6B8E4E", 
+            textAlign: "center",
+            padding: "20px",
+            borderRadius: "8px"
+          }}>
+            <h1 className="heading" style={{ color: "#3B2C27" }}>Staff Information</h1>
+            <p style={{ color: "#F4EDE1" }}>Create a new account</p>
+            <form onSubmit={this.handleSubmit}>
+              <div style={{ marginBottom: "10px" }}>
+                <label style={{ color: "#F4EDE1" }}>Username:</label><br />
+                <input type="text" name="name" placeholder="Enter user name" value={this.state.name} onChange={this.handleChange} required />
+              </div>
+              <div style={{ marginBottom: "10px" }}>
+                <label style={{ color: "#F4EDE1" }}>Role:</label><br />
+                <select name="role" value={this.state.role} onChange={this.handleChange} required>
+                  <option value="">Select role</option>
+                  <option value="Librarian">Librarian</option>
+                  <option value="Assistant">Assistant</option>
+                  <option value="Manager">Manager</option>
+                  <option value="Maintenance">Maintenance</option>
+                </select>
+              </div>
+              <div style={{ marginBottom: "10px" }}>
+                <label style={{ color: "#F4EDE1" }}>Email_id:</label><br />
+                <input type="email" name="email_id" placeholder="Enter email_id" value={this.state.email_id} onChange={this.handleChange} required />
+              </div>
+              <div style={{ marginBottom: "20px" }}>
+                <label style={{ color: "#F4EDE1" }}>Password:</label><br />
+                <input type="password" name="password" placeholder="Enter password" value={this.state.password} onChange={this.handleChange} required />
+              </div>
+              <button type="submit" className="loginButton" style={{
+                backgroundColor: "#2D4A27",
+                color: "#F4EDE1",
+                padding: "10px 20px",
+                cursor: "pointer",
+                border: "none",
+                borderRadius: "5px",
+                fontSize: "1em"
+              }}>Submit form</button>
+            </form>
+            <p style={{ color: "#F4EDE1", marginTop: "15px" }}>Already on Library? <a href="3a.html" style={{ color: "#D27D2D" }}>Sign In</a></p>
+            <button className="loginButton" style={{
+              backgroundColor: "#2D4A27",
+              color: "#F4EDE1",
+              padding: "10px 20px",
+              cursor: "pointer",
+              border: "none",
+              borderRadius: "5px",
+              fontSize: "1em",
+              marginTop: "10px"
+            }}>
+              <a href="1.html" style={{ color: "#F4EDE1", textDecoration: "none" }}>Go back to home page</a>
+            </button>
+          </div>
+        );
+      }
+    }
+
+    ReactDOM.render(<Header />, document.getElementById('header'));
+    ReactDOM.render(<StaffInformation />, document.getElementById('StaffInformation'));
+  </script>
+</body>
+</html>
